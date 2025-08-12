@@ -1,16 +1,26 @@
 import { IsEnum, IsIn, IsNotEmpty } from "class-validator";
 
-import { Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+export enum TipoCategoria {
+    REFERENCIA = 'referencia',
+    GENERICO = 'generico',
+    SIMILAR = 'similares',
+}
 
-
-@Entity({name: "tb_categoria"})
-export class Categoria{
+@Entity({ name: "tb_categoria" })
+export class Categoria {
 
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({
+        type: 'enum',
+        enum: TipoCategoria,
+        nullable: false
+    })
     @IsNotEmpty()
-    @Column({ length: 100, nullable: false })
-    tipoCategoria: string;
+    @IsEnum(TipoCategoria)
+    tipoCategoria: TipoCategoria;
+
 }

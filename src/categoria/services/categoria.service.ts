@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Categoria } from "../entities/categoria.entity";
+import { Categoria, TipoCategoria } from "../entities/categoria.entity";
 import { DeleteResult, Like, Repository } from "typeorm";
 
 @Injectable()
@@ -30,12 +30,20 @@ export class CategoriaService {
     }
 
     async findByCategoria(categoria: string): Promise<Categoria[]> {
-        return await this.categoriaRepository.find({
+        const categoriaEnum = categoria as TipoCategoria;
+
+        if (!Object.values(TipoCategoria).includes(categoriaEnum)) {
+            throw new Error(`Categoria inválida: ${categoria}`);
+        }
+
+        return this.categoriaRepository.find({
             where: {
-                tipoCategoria: Like(`%${categoria}%`)
-            },
-        })
+                tipoCategoria: categoriaEnum
+            }
+        });
     }
+
+
 
     async create(categoria: Categoria): Promise<Categoria> {
         return await this.categoriaRepository.save(categoria)
@@ -51,9 +59,9 @@ export class CategoriaService {
         return await this.categoriaRepository.save(categoria);
     }
 
-    async delete (id: number): Promise< DeleteResult > {
+    async delete(id: number): Promise<DeleteResult> {
         await this.findById(id)
         return await this.categoriaRepository.delete(id)
-}
+    }
 
 }

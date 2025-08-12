@@ -12,7 +12,11 @@ export class CategoriaService {
 
     //buscar tudo
     async findAll(): Promise<Categoria[]> {
-        return await this.categoriaRepository.find()
+        return await this.categoriaRepository.find({
+            relations: {
+                medicamento: true
+            }
+        })
     }
 
     //busca por id
@@ -22,6 +26,9 @@ export class CategoriaService {
             where: {
                 id
             },
+            relations: {
+                medicamento:true
+            }
         })
 
         if (!categoria) throw new HttpException('postagem nao encontrada', HttpStatus.NOT_FOUND)

@@ -12,7 +12,11 @@ export class MedicamentoService {
 
     //buscar tudo
     async findAll(): Promise<Medicamento[]> {
-        return await this.medicamentoRepository.find()
+        return await this.medicamentoRepository.find({
+            relations: {
+                categoria: true
+            }
+        })
     }
 
     //busca por id
@@ -22,6 +26,9 @@ export class MedicamentoService {
             where: {
                 id
             },
+            relations: {
+                categoria: true
+            }
         })
 
         if (!medicamento) throw new HttpException('postagem nao encontrada', HttpStatus.NOT_FOUND)
@@ -33,7 +40,10 @@ export class MedicamentoService {
         return await this.medicamentoRepository.find({
             where: {
                 nome: Like(`%${nome}%`)
-            },
+            }, 
+            relations: {
+                categoria: true
+            }
         })
     }
 

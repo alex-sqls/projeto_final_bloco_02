@@ -1,7 +1,8 @@
 import { IsNotEmpty } from "class-validator";
 import { Transform } from "node:stream";
 
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Categoria } from "../../categoria/entities/categoria.entity";
 
 
 @Entity({ name: "tb_medicamento" })
@@ -29,4 +30,9 @@ export class Medicamento {
     @UpdateDateColumn({ type: 'timestamp' })
     dataValidade: Date;
 
+    @ManyToOne(() => Categoria, (categoria) => categoria.medicamento, {
+    onDelete: 'CASCADE',
+  })
+    @JoinColumn({ name: 'categoria_id' })
+    categoria: Categoria;
 }

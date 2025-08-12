@@ -1,6 +1,7 @@
 import { IsEnum, IsIn, IsNotEmpty } from "class-validator";
 
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Medicamento } from "../../medicamento/entities/medicamento.entity";
 
 export enum TipoCategoria {
     REFERENCIA = 'referencia',
@@ -22,5 +23,8 @@ export class Categoria {
     @IsNotEmpty()
     @IsEnum(TipoCategoria)
     tipoCategoria: TipoCategoria;
+
+    @OneToMany(() => Medicamento, (medicamento) => medicamento.categoria)
+    medicamento: Medicamento[];
 
 }
